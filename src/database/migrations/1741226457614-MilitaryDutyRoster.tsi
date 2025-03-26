@@ -1,0 +1,72 @@
+import {
+  type MigrationInterface,
+  type QueryRunner,
+  Table,
+  TableForeignKey,
+} from 'typeorm'
+
+export default class MilitaryDutyRoster1741226457614
+  implements MigrationInterface
+{
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.createTable(
+      new Table({
+        name: 'military_duty_roster',
+        columns: [
+          {
+            name: 'military_id',
+            type: 'uuid',
+            isPrimary: true,
+          },
+          {
+            name: 'duty_rosters_id',
+            type: 'uuid',
+            isPrimary: true,
+          },
+        ],
+      })
+    )
+
+    await queryRunner.createForeignKeys('military_duty_roster', [
+      new TableForeignKey({
+        name: 'FK_military_duty_roster_military_id',
+        columnNames: ['military_id'],
+        referencedTableName: 'militaries',
+        referencedColumnNames: ['id'],
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+      }),
+      new TableForeignKey({
+        name: 'FK_military_duty_roster_duty_rosters_id',
+        columnNames: ['duty_rosters_id'],
+        referencedTableName: 'duty_rosters',
+        referencedColumnNames: ['id'],
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+      }),
+    ])
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropForeignKeys('military_duty_roster', [
+      new TableForeignKey({
+        name: 'FK_military_duty_roster_military_id',
+        columnNames: ['military_id'],
+        referencedTableName: 'militaries',
+        referencedColumnNames: ['id'],
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+      }),
+      new TableForeignKey({
+        name: 'FK_military_duty_roster_duty_rosters_id',
+        columnNames: ['duty_rosters_id'],
+        referencedTableName: 'duty_rosters',
+        referencedColumnNames: ['id'],
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+      }),
+    ])
+
+    await queryRunner.dropTable('military_duty_roster')
+  }
+}
