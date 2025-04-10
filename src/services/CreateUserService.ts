@@ -3,6 +3,8 @@ import { AppDataSource } from '../config/data-source'
 import User from '../entities/User'
 import type { Role } from '../entities/User'
 
+import AppError from '../errors/AppError'
+
 interface Request {
   username: string
   email: string
@@ -19,7 +21,7 @@ class CreateUserService {
     })
 
     if (checkUserExists) {
-      throw new Error('Email address already used.')
+      throw new AppError('Email address already used.')
     }
 
     const hashedPassword = await hash(password, 8)

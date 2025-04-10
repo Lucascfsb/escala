@@ -5,6 +5,8 @@ import authConfig from '../config/auth'
 import { AppDataSource } from '../config/data-source'
 import User from '../entities/User'
 
+import AppError from '../errors/AppError'
+
 import type { Role } from '../entities/User'
 
 interface Request {
@@ -25,17 +27,17 @@ class AuthenticateUserService {
     const user = await usersRepository.findOne({ where: { email } })
 
     if (!user) {
-      throw new Error('Incorrect email/password combination.')
+      throw new AppError('Incorrect email/password combination.', 401)
     }
 
     const passwordMatched = await compare(password, user.password)
 
     if (!passwordMatched) {
-      throw new Error('Incorrect email/password combination.')
+      throw new AppError('Incorrect email/password combination.', 401)
     }
 
     if (user.role !== role) {
-      throw new Error('Your role is incorrect')
+      throw new AppError('Your role is incorrect')
     }
 
     const { secret, expiresIn } = authConfig.jwt

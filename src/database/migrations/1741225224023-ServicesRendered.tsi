@@ -1,4 +1,4 @@
-import { type MigrationInterface, type QueryRunner, Table } from 'typeorm'
+import { type MigrationInterface, type QueryRunner, Table, TableForeignKey } from 'typeorm';
 
 export default class ServicesRendered1741225224023
   implements MigrationInterface
@@ -19,6 +19,11 @@ export default class ServicesRendered1741225224023
             name: 'military_id',
             type: 'uuid',
             isNullable: true,
+          },
+          {
+            name: 'service_types_id', 
+            type: 'uuid',
+            isNullable: false,
           },
           {
             name: 'service_date',
@@ -62,12 +67,20 @@ export default class ServicesRendered1741225224023
             onDelete: 'SET NULL',
             onUpdate: 'CASCADE',
           },
+          {
+            columnNames: ['service_types_id'], // Definição da chave estrangeira
+            referencedTableName: 'service_types',
+            referencedColumnNames: ['id'],
+            onDelete: 'CASCADE', // Ou SET NULL, RESTRICT, etc.
+            onUpdate: 'CASCADE',
+            name: 'FK_services_rendered_service_types', // Nome da chave estrangeira (opcional)
+          },
         ],
       })
-    )
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('services_rendered')
+    await queryRunner.dropTable('services_rendered');
   }
 }

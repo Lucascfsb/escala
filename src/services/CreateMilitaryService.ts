@@ -2,6 +2,8 @@ import type Military from '../entities/Military'
 import type { Qualification, Rank } from '../entities/Military'
 import MilitariesRepository from '../repositories/MilitariesRepository'
 
+import AppError from '../errors/AppError'
+
 interface Request {
   name: string
   rank: Rank
@@ -28,7 +30,7 @@ class CreateMilitaryService {
     })
 
     if (findMilitary) {
-      throw new Error('Esse militar já existe no banco de dados!')
+      throw new AppError('Esse militar já existe no banco de dados!')
     }
 
     const military = await militariesRepository.create({
@@ -43,7 +45,7 @@ class CreateMilitaryService {
     if (military) {
       await militariesRepository.save(military)
     } else {
-      throw new Error('Falha ao criar militar')
+      throw new AppError('Falha ao criar militar')
     }
 
     return military

@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "express": "^4.21.2",
+    "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.2",
     "pg": "^8.13.3",
@@ -22,6 +24,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@types/bcryptjs": "^3.0.0",
+    "@types/cors": "^2.8.17",
     "@types/express": "4.17.21",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/multer": "^1.4.12",

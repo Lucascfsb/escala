@@ -1,10 +1,11 @@
-import { type MigrationInterface, type QueryRunner, Table } from 'typeorm'
+import type { MigrationInterface, QueryRunner } from 'typeorm'
+import { Table } from 'typeorm'
 
-export default class DutyRosters1741225183340 implements MigrationInterface {
+export class ServiceTypes1744239564943 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'duty_rosters',
+        name: 'service_types',
         columns: [
           {
             name: 'id',
@@ -14,14 +15,10 @@ export default class DutyRosters1741225183340 implements MigrationInterface {
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'scale_date',
-            type: 'timestamp with time zone',
-            isNullable: false,
-          },
-          {
-            name: 'scale_type',
+            name: 'name',
             type: 'varchar',
-            isNullable: true,
+            isNullable: false,
+            isUnique: true,
           },
           {
             name: 'description',
@@ -47,6 +44,6 @@ export default class DutyRosters1741225183340 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('duty_rosters')
+    await queryRunner.dropTable('service_types')
   }
 }

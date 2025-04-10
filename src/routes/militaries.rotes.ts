@@ -3,6 +3,7 @@ import { Router } from 'express'
 import MilitariesRepository from '../repositories/MilitariesRepository'
 import CreateMilitaryService from '../services/CreateMilitaryService'
 
+import ensureAdmin from '../middlewares/ensureAdmin'
 import ensureAuthenticated from '../middlewares/ensureAuthenticated'
 
 const militariesRouter = Router()
@@ -10,8 +11,6 @@ const militariesRouter = Router()
 militariesRouter.use(ensureAuthenticated)
 
 militariesRouter.get('/', async (request, response) => {
-  console.log(request.user)
-
   const militariesRepository = new MilitariesRepository()
   const militaries = await militariesRepository.findAll()
 
@@ -29,29 +28,21 @@ militariesRouter.get('/:name', async (request, response) => {
   return response.status(404).json({ error: 'Militar não encontrado' })
 })
 
-militariesRouter.post('/', async (request, response) => {
-  try {
-    const { name, rank, qualification, date_of_entry, created_at, updated_at } =
-      request.body
+militariesRouter.post('/', ensureAdmin, async (request, response) => {
+  const { name, rank, qualification, date_of_entry, created_at, updated_at } =
+    request.body
 
-    const createMilitary = new CreateMilitaryService()
+  const createMilitary = new CreateMilitaryService()
 
-    const military = await createMilitary.execute({
-      name,
-      qualification,
-      date_of_entry,
-      rank,
-      created_at,
-      updated_at,
-    })
-
-    return response.json(military)
-  } catch (err) {
-    if (err instanceof Error) {
-      return response.status(400).json({ error: err.message })
-    }
-    return response.status(400).json({ error: 'Unknown error' })
-  }
+  const military = await createMilitary.execute({
+    name,
+    qualification,
+    date_of_entry,
+    rank,
+    created_at,
+    updated_at,
+  })
+  return response.json(military)
 })
 
 export default militariesRouter
