@@ -1,6 +1,6 @@
-import { type MigrationInterface, type QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { type MigrationInterface, type QueryRunner, Table } from 'typeorm'
 
-export default class ServicesRendered1741225224023
+export default class ServicesRendered1744549772742
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -21,28 +21,13 @@ export default class ServicesRendered1741225224023
             isNullable: true,
           },
           {
-            name: 'service_types_id', 
+            name: 'service_types_id',
             type: 'uuid',
             isNullable: false,
           },
           {
             name: 'service_date',
             type: 'timestamp with time zone',
-            isNullable: false,
-          },
-          {
-            name: 'type_of_service',
-            type: 'enum',
-            enum: [
-              'Sentinela',
-              'Plantão',
-              'Cabo da Guarda',
-              'Comandante da Guarda',
-              'Sargento de Dia',
-              'Adjunto ao Oficial',
-              'Oficial de Dia',
-              'Superior de Dia',
-            ],
             isNullable: false,
           },
           {
@@ -68,19 +53,19 @@ export default class ServicesRendered1741225224023
             onUpdate: 'CASCADE',
           },
           {
-            columnNames: ['service_types_id'], // Definição da chave estrangeira
+            columnNames: ['service_types_id'],
             referencedTableName: 'service_types',
             referencedColumnNames: ['id'],
-            onDelete: 'CASCADE', // Ou SET NULL, RESTRICT, etc.
+            onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
-            name: 'FK_services_rendered_service_types', // Nome da chave estrangeira (opcional)
+            name: 'FK_services_rendered_service_types',
           },
         ],
       })
-    );
+    )
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('services_rendered');
+    await queryRunner.dropTable('services_rendered')
   }
 }

@@ -2,9 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
+
+import MilitaryDutyRoster from './MilitaryDutyRoster'
+import ServiceRendered from './ServiceRendered'
 
 export enum Rank {
   Soldado = 'Soldado',
@@ -45,6 +49,18 @@ class Military {
 
   @Column({ type: 'enum', enum: Qualification })
   qualification: Qualification
+
+  @OneToMany(
+    () => ServiceRendered,
+    (serviceRendered: ServiceRendered) => serviceRendered.military
+  )
+  servicesRendered: ServiceRendered[]
+
+  @OneToMany(
+    () => MilitaryDutyRoster,
+    (militaryDutyRoster: MilitaryDutyRoster) => militaryDutyRoster.military
+  )
+  militaryDutyRosters: MilitaryDutyRoster[]
 
   @CreateDateColumn()
   created_at: Date
