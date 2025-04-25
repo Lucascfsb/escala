@@ -1,5 +1,5 @@
 import { AppDataSource } from '../config/data-source'
-import ServiceTypes from '../entities/ServiceTypes'
+import ServiceTypes from '../entities/ServiceType'
 
 class ServiceTypesRepository {
   private repository = AppDataSource.getRepository(ServiceTypes)

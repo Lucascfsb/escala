@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -9,7 +10,7 @@ import {
 } from 'typeorm'
 import Military from './Military'
 import MilitaryDutyRoster from './MilitaryDutyRoster'
-import ServiceTypes from './ServiceTypes'
+import ServiceTypes from './ServiceType'
 
 @Entity('services_rendered')
 class ServiceRendered {
@@ -19,27 +20,15 @@ class ServiceRendered {
   @Column({ type: 'uuid', nullable: true })
   military_id: string
 
-  @ManyToOne(
-    () => Military,
-    military => military.servicesRendered,
-    {
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE',
-    }
-  )
+  @ManyToOne(() => Military)
+  @JoinColumn({ name: 'military_id' })
   military: Military
 
   @Column({ type: 'uuid' })
   service_types_id: string
 
-  @ManyToOne(
-    () => ServiceTypes,
-    serviceType => serviceType.servicesRendered,
-    {
-      onDelete: 'CASCADE',
-      onUpdate: 'CASCADE',
-    }
-  )
+  @ManyToOne(() => ServiceTypes)
+  @JoinColumn({ name: 'service_types_id' })
   serviceType: ServiceTypes
 
   @OneToMany(

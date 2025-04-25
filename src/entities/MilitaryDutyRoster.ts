@@ -1,6 +1,6 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm'
 import Military from './Military'
-import ServiceTypes from './ServiceTypes'
+import ServiceTypes from './ServiceType'
 
 @Entity('military_duty_roster')
 class MilitaryDutyRoster {

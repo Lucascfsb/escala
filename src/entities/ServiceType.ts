@@ -11,7 +11,7 @@ import MilitaryDutyRoster from './MilitaryDutyRoster'
 import ServiceRendered from './ServiceRendered'
 
 @Entity('service_types')
-class ServiceTypes {
+class ServiceType {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
@@ -40,4 +40,4 @@ class ServiceTypes {
   updated_at: Date
 }
 
-export default ServiceTypes
+export default ServiceType
