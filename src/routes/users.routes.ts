@@ -8,6 +8,7 @@ import UpdateUserAvatarService from '../services/UpdateUserAvatarService'
 
 import ensureAdmin from '../middlewares/ensureAdmin'
 import ensureAuthenticated from '../middlewares/ensureAuthenticated'
+import UpdateUserInfoService from '../services/UpdateUserInfoService'
 
 const usersRouter = Router()
 const upload = multer(uploadConfig)
@@ -47,16 +48,26 @@ usersRouter.patch(
   }
 )
 
-usersRouter.get(
-  '/',
-  ensureAuthenticated,
-  ensureAdmin,
-  async (request, response) => {
-    const usersRepository = new UsersRepository()
-    const servicesTypes = await usersRepository.findAll()
+usersRouter.put('/:username', ensureAuthenticated, ensureAdmin, async (request, response) => {
+  const { username } = request.params
+  const { email, password, role } = request.body
 
-    return response.json(servicesTypes)
-  }
-)
+  const updateUser = new UpdateUserInfoService()
+  const user = await updateUser.execute({
+    username,
+    role,
+    email,
+    password,
+  })
+
+  return response.json(user)
+})
+
+usersRouter.get('/', ensureAuthenticated, ensureAdmin, async (request, response) => {
+  const usersRepository = new UsersRepository()
+  const servicesTypes = await usersRepository.findAll()
+
+  return response.json(servicesTypes)
+})
 
 export default usersRouter

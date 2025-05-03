@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import militariesRouter from './militaries.rotes'
+import militariesRouter from './militaries.routes'
 import serviceRenderedRouter from './serviceRendered.router'
 import serviceTypesRouter from './serviceTypes.router'
 import sessionsRouter from './sessions.routes'

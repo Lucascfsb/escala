@@ -9,7 +9,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 import Military from './Military'
-import MilitaryDutyRoster from './MilitaryDutyRoster'
 import ServiceTypes from './ServiceType'
 
 @Entity('services_rendered')
@@ -30,12 +29,6 @@ class ServiceRendered {
   @ManyToOne(() => ServiceTypes)
   @JoinColumn({ name: 'service_types_id' })
   serviceType: ServiceTypes
-
-  @OneToMany(
-    () => MilitaryDutyRoster,
-    (militaryDutyRoster: MilitaryDutyRoster) => militaryDutyRoster.military
-  )
-  militaryDutyRosters: MilitaryDutyRoster[]
 
   @Column({ type: 'timestamp with time zone' })
   service_date: Date

@@ -7,7 +7,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
-import MilitaryDutyRoster from './MilitaryDutyRoster'
 import ServiceRendered from './ServiceRendered'
 
 @Entity('service_types')
@@ -26,12 +25,6 @@ class ServiceType {
     serviceRendered => serviceRendered.serviceType
   )
   servicesRendered: ServiceRendered[]
-
-  @OneToMany(
-    () => MilitaryDutyRoster,
-    (militaryDutyRoster: MilitaryDutyRoster) => militaryDutyRoster.serviceType
-  )
-  militaryDutyRosters: MilitaryDutyRoster[]
 
   @CreateDateColumn()
   created_at: Date

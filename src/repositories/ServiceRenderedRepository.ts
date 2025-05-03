@@ -10,17 +10,14 @@ class ServiceRenderedRepository {
     })
   }
 
-  public async findById(id: string): Promise<ServiceRendered | null> {
+  public async findByName(military: string): Promise<ServiceRendered | null> {
     return this.repository.findOne({
-      where: { id },
+      where: { military: { name: military } },
       relations: ['military', 'serviceType'],
     })
   }
 
-  public async update(
-    id: string,
-    data: Partial<ServiceRendered>
-  ): Promise<ServiceRendered | null> {
+  public async update(id: string, data: Partial<ServiceRendered>): Promise<ServiceRendered | null> {
     await this.repository.update(id, data)
     return this.repository.findOne({ where: { id } })
   }

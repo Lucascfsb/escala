@@ -1,14 +1,12 @@
 import { AppDataSource } from '../config/data-source'
 import Military from '../entities/Military'
 import type { Qualification, Rank } from '../entities/Military'
+import AppError from '../errors/AppError'
 
 class MilitariesRepository {
   private repository = AppDataSource.getRepository(Military)
 
-  public async findOne({
-    name,
-    rank,
-  }: { name: string; rank?: Rank }): Promise<Military | null> {
+  public async findOne({ name, rank }: { name: string; rank?: Rank }): Promise<Military | null> {
     if (!name && !rank) {
       return null
     }
@@ -25,6 +23,14 @@ class MilitariesRepository {
 
   public async findAll(): Promise<Military[]> {
     return this.repository.find()
+  }
+
+  public async findById(id: string): Promise<Military | null> {
+    const militaryId = await this.repository.findOne({
+      where: { id },
+    })
+
+    return militaryId
   }
 
   public async create({

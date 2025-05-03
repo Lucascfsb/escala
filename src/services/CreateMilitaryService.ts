@@ -48,6 +48,8 @@ class CreateMilitaryService {
       throw new AppError('Falha ao criar militar')
     }
 
+    await militariesRepository.save(military)
+
     return military
   }
 }
