@@ -6,6 +6,7 @@ import AppError from '../errors/AppError'
 import type { Role } from '../entities/User'
 
 interface Request {
+  id: string
   username: string
   email?: string
   password?: string
@@ -13,10 +14,10 @@ interface Request {
 }
 
 class UpdateUserInfoService {
-  public async execute({ username, email, password, role }: Request): Promise<User> {
+  public async execute({ id, username, email, password, role }: Request): Promise<User> {
     const userRepository = new UsersRepository()
 
-    const userUpdate = await userRepository.findOne({ username })
+    const userUpdate = await userRepository.findById({ id })
 
     if (!userUpdate) {
       throw new AppError('User not found', 404)

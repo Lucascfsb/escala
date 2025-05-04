@@ -64,6 +64,13 @@ class MilitariesRepository {
     const militaryRepository = AppDataSource.getRepository(Military)
     return await militaryRepository.save(military)
   }
+
+  public async findByName(name: string): Promise<Military | undefined> {
+    const findMilitary = await this.repository.findOne({
+      where: { name },
+    })
+    return findMilitary || undefined
+  }
 }
 
 export default MilitariesRepository

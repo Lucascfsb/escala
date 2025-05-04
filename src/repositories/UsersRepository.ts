@@ -13,14 +13,10 @@ class UsersRepository {
     return await userRepository.save(user)
   }
 
-  public async findOne({ username }: { username: string }): Promise<User | null> {
-    if (!username) {
-      return null
-    }
-
+  public async findById({ id }: { id: string }): Promise<User | null> {
     const findUser = await this.repository.findOne({
       where: {
-        username,
+        id,
       },
     })
     return findUser || null

@@ -4,6 +4,7 @@ import ensureAdmin from '../middlewares/ensureAdmin'
 import ensureAuthenticated from '../middlewares/ensureAuthenticated'
 import ServiceRenderedRepository from '../repositories/ServiceRenderedRepository'
 import ServiceRenderedService from '../services/ServiceRenderedService'
+import UpdateServiceRenderedService from '../services/UpdateServiceRenderedService'
 
 const serviceRenderedRouter = Router()
 
@@ -20,6 +21,23 @@ serviceRenderedRouter.post('/', ensureAdmin, async (request, response) => {
     service_types_id,
     military,
     serviceTypes,
+  })
+
+  return response.json(serviceRendered)
+})
+
+serviceRenderedRouter.put('/:id', async (request, response) => {
+  const { id } = request.params
+  const { military_id, military, service_types_id, serviceTypes, service_date } = request.body
+
+  const updateServiceRendered = new UpdateServiceRenderedService()
+  const serviceRendered = await updateServiceRendered.execute({
+    id,
+    military_id,
+    military,
+    service_types_id,
+    serviceTypes,
+    service_date,
   })
 
   return response.json(serviceRendered)

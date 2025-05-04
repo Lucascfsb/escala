@@ -48,12 +48,13 @@ usersRouter.patch(
   }
 )
 
-usersRouter.put('/:username', ensureAuthenticated, ensureAdmin, async (request, response) => {
-  const { username } = request.params
-  const { email, password, role } = request.body
+usersRouter.put('/:id', ensureAuthenticated, ensureAdmin, async (request, response) => {
+  const { id } = request.params
+  const { username, email, password, role } = request.body
 
   const updateUser = new UpdateUserInfoService()
   const user = await updateUser.execute({
+    id,
     username,
     role,
     email,

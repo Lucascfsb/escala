@@ -17,6 +17,20 @@ class ServiceRenderedRepository {
     })
   }
 
+  public async findById({ id }: { id: string }): Promise<ServiceRendered | null> {
+    const findServiceRendered = await this.repository.findOne({
+      where: {
+        id,
+      },
+    })
+    return findServiceRendered || null
+  }
+
+  public async save(serviceRendered: ServiceRendered): Promise<ServiceRendered> {
+    const servicesTypesRepository = AppDataSource.getRepository(ServiceRendered)
+    return await servicesTypesRepository.save(serviceRendered)
+  }
+
   public async update(id: string, data: Partial<ServiceRendered>): Promise<ServiceRendered | null> {
     await this.repository.update(id, data)
     return this.repository.findOne({ where: { id } })
