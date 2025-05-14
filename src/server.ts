@@ -5,7 +5,6 @@ import express from 'express'
 import type { NextFunction, Request, Response } from 'express'
 import 'express-async-errors'
 
-import bodyParser from 'body-parser'
 import uploadConfig from './config/upload'
 import AppError from './errors/AppError'
 import routes from './routes'
