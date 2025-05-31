@@ -1,7 +1,6 @@
 import { AppDataSource } from '../config/data-source'
 import Military from '../entities/Military'
 import type { Qualification, Rank } from '../entities/Military'
-import AppError from '../errors/AppError'
 
 class MilitariesRepository {
   private repository = AppDataSource.getRepository(Military)

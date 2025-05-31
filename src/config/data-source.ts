@@ -7,6 +7,7 @@ export const AppDataSource = new DataSource({
   username: 'postgres',
   password: '123456',
   database: 'escalaSv',
+  synchronize: false, 
   migrations: ['./src/database/migrations/*.ts'],
   entities: ['./src/entities/*.ts'],
 })
