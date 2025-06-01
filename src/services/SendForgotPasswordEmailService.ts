@@ -13,7 +13,7 @@ interface Request {
 class SendForgotPasswordEmailService {
   public async execute({ email }: Request): Promise<void> {
     const usersRepository = AppDataSource.getRepository(User);
-const userTokensRepository = new UserTokensRepository();
+    const userTokensRepository = new UserTokensRepository();
 
     const user = await usersRepository.findOne({ where: { email } }); 
     if (!user) {
@@ -30,7 +30,8 @@ const userTokensRepository = new UserTokensRepository();
         file: path.resolve(__dirname, '..', 'views', 'forgot_password.hbs'),
         variables: {
           name: user.username, 
-          link: `${process.env.APP_WEB_URL}/reset-password?token=${userToken.token}`, 
+          link: `${process.env.APP_WEB_URL}/reset-password?token=${userToken.token}`,
+ 
         },
       },
     });

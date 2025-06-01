@@ -10,11 +10,10 @@ interface IMailConfig {
 
 export default {
   driver: process.env.MAIL_DRIVER || 'ethereal',
-
   defaults: {
     from: {
-      email: process.env.MAIL_FROM_EMAIL || 'noreply@yourdomain.com',
-      name: process.env.MAIL_FROM_NAME || 'Equipe YourApp',
-    },
-  },
+      email: 'noreply@yourdomain.com',
+      name: 'Equipe YourApp'
+    }
+  }
 } as IMailConfig

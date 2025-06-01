@@ -3,6 +3,10 @@
 node_modules/
 build/
 temp/
+.env
+package-lock.json
+
+
 
 tmp/*
 !tmp/gitkeep
