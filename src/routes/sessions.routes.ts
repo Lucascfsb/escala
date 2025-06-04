@@ -1,5 +1,7 @@
 import { Router } from 'express'
 
+import { instanceToPlain } from 'class-transformer'
+
 import AuthenticateUserService from '../services/AuthenticateUserService'
 
 const sessionsRouter = Router()
@@ -15,9 +17,9 @@ sessionsRouter.post('/', async (request, response) => {
     role,
   })
 
-  const { password: userPassword, ...userWithoutPassword } = user
+  const userResponse = instanceToPlain(user)
 
-  return response.json({ userWithoutPassword, token })
+  return response.json({ user: userResponse, token })
 })
 
 export default sessionsRouter

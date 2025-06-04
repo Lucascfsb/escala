@@ -22,7 +22,7 @@ class UsersRepository {
     return findUser || null
   }
 
-  public async findByEmail( email: string ): Promise<User | null> {
+  public async findByEmail(email: string): Promise<User | null> {
     const findEmail = await this.repository.findOne({
       where: {
         email,

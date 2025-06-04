@@ -1,3 +1,4 @@
+import { instanceToPlain } from 'class-transformer'
 import { Router } from 'express'
 import multer from 'multer'
 import uploadConfig from '../config/upload'
@@ -5,10 +6,10 @@ import uploadConfig from '../config/upload'
 import UsersRepository from '../repositories/UsersRepository'
 import CreateUserService from '../services/CreateUserService'
 import UpdateUserAvatarService from '../services/UpdateUserAvatarService'
+import UpdateUserInfoService from '../services/UpdateUserInfoService'
 
 import ensureAdmin from '../middlewares/ensureAdmin'
 import ensureAuthenticated from '../middlewares/ensureAuthenticated'
-import UpdateUserInfoService from '../services/UpdateUserInfoService'
 
 const usersRouter = Router()
 const upload = multer(uploadConfig)
@@ -25,7 +26,8 @@ usersRouter.post('/', async (request, response) => {
     role,
   })
 
-  const { password: userPassword, ...userWithoutPassword } = user
+  const userResponse = instanceToPlain(user)
+  const { password: userPassword, ...userWithoutPassword } = userResponse
 
   return response.json(userWithoutPassword)
 })
@@ -42,33 +44,46 @@ usersRouter.patch(
       avatarFilename: request.file?.filename ?? '',
     })
 
-    const { password, ...userWithoutPassword } = user
+    const userResponse = instanceToPlain(user)
 
-    return response.json(userWithoutPassword)
+    const { password, ...userResponseWithoutPassword } = userResponse
+
+    return response.json(userResponseWithoutPassword)
   }
 )
 
 usersRouter.put('/:id', ensureAuthenticated, ensureAdmin, async (request, response) => {
   const { id } = request.params
-  const { username, email, password, role } = request.body
+  const { username, email, role, oldPassword, password, passwordConfirmation } = request.body
 
   const updateUser = new UpdateUserInfoService()
   const user = await updateUser.execute({
     id,
     username,
-    role,
     email,
+    role,
+    oldPassword,
     password,
+    passwordConfirmation,
   })
 
-  return response.json(user)
+  const userResponse = instanceToPlain(user)
+
+  const { password: userPassword, ...userResponseWithoutPassword } = userResponse
+
+  return response.json(userResponseWithoutPassword)
 })
 
 usersRouter.get('/', ensureAuthenticated, ensureAdmin, async (request, response) => {
   const usersRepository = new UsersRepository()
-  const servicesTypes = await usersRepository.findAll()
+  const users = await usersRepository.findAll()
 
-  return response.json(servicesTypes)
+  const usersResponse = users.map(user => {
+    const plainUser = instanceToPlain(user)
+    return plainUser
+  })
+
+  return response.json(usersResponse)
 })
 
 export default usersRouter
