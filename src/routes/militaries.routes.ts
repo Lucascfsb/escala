@@ -2,6 +2,7 @@ import { Router } from 'express'
 
 import MilitariesRepository from '../repositories/MilitariesRepository'
 import CreateMilitaryService from '../services/CreateMilitaryService'
+import DeleteMilitaryService from '../services/DeleteMilitaryService'
 import UpdateMilitaryInfo from '../services/UpdateMilitaryInfoService'
 
 import ensureAdmin from '../middlewares/ensureAdmin'
@@ -59,6 +60,15 @@ militariesRouter.put('/:id', ensureAuthenticated, ensureAdmin, async (request, r
   })
 
   return response.json(military)
+})
+
+militariesRouter.delete('/:id', async (request, response) => {
+  const { id } = request.params
+  const deleteMilitaryService = new DeleteMilitaryService()
+
+  await deleteMilitaryService.execute(id)
+
+  return response.status(204).send()
 })
 
 export default militariesRouter

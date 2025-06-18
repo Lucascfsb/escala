@@ -1,3 +1,4 @@
+import { type FindOperator, ILike } from 'typeorm'
 import { AppDataSource } from '../config/data-source'
 import Military from '../entities/Military'
 import type { Qualification, Rank } from '../entities/Military'
@@ -10,11 +11,17 @@ class MilitariesRepository {
       return null
     }
 
+    const whereClause: { name?: string | FindOperator<string>; rank?: Rank } = {}
+
+    if (name) {
+      whereClause.name = ILike(`%${name}%`)
+    }
+    if (rank) {
+      whereClause.rank = rank
+    }
+
     const findMilitary = await this.repository.findOne({
-      where: {
-        name,
-        rank,
-      },
+      where: whereClause,
     })
 
     return findMilitary || null
@@ -66,9 +73,13 @@ class MilitariesRepository {
 
   public async findByName(name: string): Promise<Military | undefined> {
     const findMilitary = await this.repository.findOne({
-      where: { name },
+      where: { name: ILike(`%${name}%`) },
     })
     return findMilitary || undefined
+  }
+
+  public async delete(id: string): Promise<void> {
+    await this.repository.delete(id)
   }
 }
 
