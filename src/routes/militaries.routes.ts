@@ -5,6 +5,7 @@ import CreateMilitaryService from '../services/CreateMilitaryService'
 import DeleteMilitaryService from '../services/DeleteMilitaryService'
 import UpdateMilitaryInfo from '../services/UpdateMilitaryInfoService'
 
+import type Military from '../entities/Military'
 import ensureAdmin from '../middlewares/ensureAdmin'
 import ensureAuthenticated from '../middlewares/ensureAuthenticated'
 
@@ -14,20 +15,21 @@ militariesRouter.use(ensureAuthenticated)
 
 militariesRouter.get('/', async (request, response) => {
   const militariesRepository = new MilitariesRepository()
-  const militaries = await militariesRepository.findAll()
+  const { name } = request.query
 
-  return response.json(militaries)
-})
+  let militaries: Military[]
 
-militariesRouter.get('/:name', async (request, response) => {
-  const militariesRepository = new MilitariesRepository()
-  const { name } = request.params
-  const military = await militariesRepository.findOne({ name })
-
-  if (military) {
-    return response.json(military)
+  try {
+    if (name && typeof name === 'string') {
+      militaries = await militariesRepository.findManyByName(name)
+    } else {
+      militaries = await militariesRepository.findAll()
+    }
+    return response.json(militaries)
+  } catch (error) {
+    console.error('Erro ao buscar/listar militares:', error)
+    return response.status(500).json({ error: 'Erro ao processar a requisição de militares.' })
   }
-  return response.status(404).json({ error: 'Militar não encontrado' })
 })
 
 militariesRouter.post('/', ensureAdmin, async (request, response) => {

@@ -71,11 +71,11 @@ class MilitariesRepository {
     return await militaryRepository.save(military)
   }
 
-  public async findByName(name: string): Promise<Military | undefined> {
-    const findMilitary = await this.repository.findOne({
+  public async findManyByName(name: string): Promise<Military[]> {
+    const findMilitaries = await this.repository.find({
       where: { name: ILike(`%${name}%`) },
     })
-    return findMilitary || undefined
+    return findMilitaries
   }
 
   public async delete(id: string): Promise<void> {
