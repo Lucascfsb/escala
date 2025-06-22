@@ -20,6 +20,16 @@ class CreateServiceTypeService {
   }: Request): Promise<ServiceTypes> {
     const serviceTypesRepository = AppDataSource.getRepository(ServiceTypes)
 
+    if (!name || typeof name !== 'string' || name.trim() === '') {
+      throw new AppError('O nome do serviço é obrigatório e deve ser uma string não vazia.', 400)
+    }
+    if (!description || typeof description !== 'string' || description.trim() === '') {
+      throw new AppError(
+        'A descrição do serviço é obrigatória e deve ser uma string não vazia.',
+        400
+      )
+    }
+
     const lowerCaseName = name.toLowerCase()
 
     try {
