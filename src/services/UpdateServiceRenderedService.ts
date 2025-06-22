@@ -49,10 +49,11 @@ class UpdateServiceRenderedService {
       }
       // Busca por nome se não tiver ID
       else if (military) {
-        militaryToUpdate = await militaryRepository.findByName(military)
-        if (!militaryToUpdate) {
+        const foundMilitaries = await militaryRepository.findManyByName(military)
+        if (!foundMilitaries || foundMilitaries.length === 0) {
           throw new AppError(`Military "${military}" not found`, 404)
         }
+        militaryToUpdate = foundMilitaries[0]
       }
 
       // Atualiza os dados do militar no serviço
@@ -73,10 +74,11 @@ class UpdateServiceRenderedService {
           throw new AppError('Service type not found with provided ID', 404)
         }
       } else if (serviceTypes) {
-        serviceTypeToUpdate = await serviceTypeRepository.findByName(serviceTypes)
-        if (!serviceTypeToUpdate) {
+        const foundServiceTypes = await serviceTypeRepository.findByName(serviceTypes)
+        if (!foundServiceTypes || foundServiceTypes.length === 0) {
           throw new AppError(`Service type "${serviceTypes}" not found`, 404)
         }
+        serviceTypeToUpdate = foundServiceTypes[0]
       }
 
       if (serviceTypeToUpdate) {

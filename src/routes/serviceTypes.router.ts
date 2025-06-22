@@ -1,9 +1,11 @@
 import { Router } from 'express'
 
+import type ServiceTypes from '../entities/ServiceType'
 import ensureAdmin from '../middlewares/ensureAdmin'
 import ensureAuthenticated from '../middlewares/ensureAuthenticated'
 import ServiceTypesRepository from '../repositories/ServiceTypeRepository'
 import CreateServiceTypesService from '../services/CreateServiceTypeService'
+import DeleteServiceTypeService from '../services/DeleteServiceTypeService'
 import UpdateServiceTypeService from '../services/UpdateServiceTypeService'
 
 const serviceTypesRouter = Router()
@@ -40,9 +42,30 @@ serviceTypesRouter.put('/:id', ensureAuthenticated, ensureAdmin, async (request,
 
 serviceTypesRouter.get('/', async (request, response) => {
   const serviceTypesRepository = new ServiceTypesRepository()
-  const servicesTypes = await serviceTypesRepository.findAll()
+  const { name } = request.query
 
-  return response.json(servicesTypes)
+  let servicesType: ServiceTypes[]
+
+  try {
+    if (name && typeof name === 'string') {
+      servicesType = await serviceTypesRepository.findByName(name)
+    } else {
+      servicesType = await serviceTypesRepository.findAll()
+    }
+    return response.json(servicesType)
+  } catch (error) {
+    console.error('Error fetching service types:', error)
+    return response.status(500).json({ error: 'Error processing the request for service types.' })
+  }
+})
+
+serviceTypesRouter.delete('/:id', async (request, response) => {
+  const { id } = request.params
+  const deleteServiceTypeService = new DeleteServiceTypeService()
+
+  await deleteServiceTypeService.execute(id)
+
+  return response.status(204).send()
 })
 
 export default serviceTypesRouter
