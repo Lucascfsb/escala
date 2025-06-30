@@ -1,7 +1,7 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm'
 import { Table, TableForeignKey } from 'typeorm'
 
-export class CreateUserTokens1748724229358 implements MigrationInterface {
+export class CreateUserTokens1751296369631 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({

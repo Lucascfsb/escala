@@ -7,6 +7,7 @@ import AppError from '../errors/AppError'
 interface Request {
   name: string
   description: string
+  rank: string
   created_at: Date
   updated_at: Date
 }
@@ -15,6 +16,7 @@ class CreateServiceTypeService {
   public async execute({
     name,
     description,
+    rank,
     created_at,
     updated_at,
   }: Request): Promise<ServiceTypes> {
@@ -44,6 +46,7 @@ class CreateServiceTypeService {
       const serviceType = serviceTypesRepository.create({
         name,
         description,
+        rank,
         created_at,
         updated_at,
       })

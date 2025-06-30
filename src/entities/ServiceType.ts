@@ -20,6 +20,9 @@ class ServiceType {
   @Column()
   description: string
 
+  @Column()
+  rank: string
+
   @OneToMany(
     () => ServiceRendered,
     serviceRendered => serviceRendered.serviceType

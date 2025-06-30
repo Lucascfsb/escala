@@ -1,7 +1,7 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm'
 import { Table } from 'typeorm'
 
-export class ServiceTypes1744239564943 implements MigrationInterface {
+export class ServiceTypes1751296350701 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -24,6 +24,18 @@ export class ServiceTypes1744239564943 implements MigrationInterface {
             name: 'description',
             type: 'varchar',
             isNullable: true,
+          },
+          {
+            name: 'rank',
+            type: 'enum',
+            enum: [
+              'Sd',
+              'Cb',
+              'Serviço de Sgt',
+              'Serviço de Oficial Subalterno',
+              'Serviço de Oficial Superior',
+            ],
+            isNullable: false,
           },
           {
             name: 'created_at',

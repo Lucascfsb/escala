@@ -28,27 +28,22 @@ class UpdateServiceRenderedService {
     const militaryRepository = new MilitaryRepository()
     const serviceTypeRepository = new ServiceTypeRepository()
 
-    // Busca o serviço a ser atualizado
     const serviceRenderedUpdate = await serviceRenderedRepository.findById({ id })
 
     if (!serviceRenderedUpdate) {
       throw new AppError('Service not found', 404)
     }
 
-    // Lógica para atualização do militar
     if (military || military_id) {
       let militaryToUpdate: Military | undefined
 
-      // Prioridade para o military_id se existir
       if (military_id) {
         const foundMilitary = await militaryRepository.findById(military_id)
         militaryToUpdate = foundMilitary === null ? undefined : foundMilitary
         if (!militaryToUpdate) {
           throw new AppError('Military not found with provided ID', 404)
         }
-      }
-      // Busca por nome se não tiver ID
-      else if (military) {
+      } else if (military) {
         const foundMilitaries = await militaryRepository.findManyByName(military)
         if (!foundMilitaries || foundMilitaries.length === 0) {
           throw new AppError(`Military "${military}" not found`, 404)
@@ -56,14 +51,12 @@ class UpdateServiceRenderedService {
         militaryToUpdate = foundMilitaries[0]
       }
 
-      // Atualiza os dados do militar no serviço
       if (militaryToUpdate) {
         serviceRenderedUpdate.military = militaryToUpdate
         serviceRenderedUpdate.military_id = militaryToUpdate.id
       }
     }
 
-    // Lógica para atualização do tipo de serviço
     if (serviceTypes || service_types_id) {
       let serviceTypeToUpdate: ServiceType | undefined
 

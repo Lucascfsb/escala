@@ -9,6 +9,7 @@ interface Request {
   id: string
   name?: string
   description?: string
+  rank: string
 }
 
 class UpdateServiceTypeService {

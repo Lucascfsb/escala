@@ -1,8 +1,7 @@
-import { type MigrationInterface, type QueryRunner, Table } from 'typeorm'
+import type { MigrationInterface, QueryRunner } from 'typeorm'
+import { Table } from 'typeorm'
 
-export default class ServicesRendered1744549772742
-  implements MigrationInterface
-{
+export class ServiceRendered1751296361277 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({

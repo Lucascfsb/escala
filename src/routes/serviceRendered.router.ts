@@ -1,5 +1,6 @@
 import { Router } from 'express'
 
+import type ServiceRendered from '../entities/ServiceRendered'
 import ensureAdmin from '../middlewares/ensureAdmin'
 import ensureAuthenticated from '../middlewares/ensureAuthenticated'
 import ServiceRenderedRepository from '../repositories/ServiceRenderedRepository'
@@ -45,9 +46,19 @@ serviceRenderedRouter.put('/:id', async (request, response) => {
 
 serviceRenderedRouter.get('/', async (request, response) => {
   const serviceRenderedRepository = new ServiceRenderedRepository()
-  const serviceRendered = await serviceRenderedRepository.findAll()
+  const { startDate, endDate } = request.query
 
-  return response.json(serviceRendered)
+  let servicesRendered: ServiceRendered[]
+  if (startDate && endDate) {
+    servicesRendered = await serviceRenderedRepository.findByDateRange(
+      String(startDate),
+      String(endDate)
+    )
+  } else {
+    servicesRendered = await serviceRenderedRepository.findAll()
+  }
+
+  return response.json(servicesRendered)
 })
 
 serviceRenderedRouter.get('/:name', async (request, response) => {

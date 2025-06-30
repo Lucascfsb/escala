@@ -13,13 +13,14 @@ const serviceTypesRouter = Router()
 serviceTypesRouter.use(ensureAuthenticated)
 
 serviceTypesRouter.post('/', ensureAuthenticated, ensureAdmin, async (request, response) => {
-  const { name, description, created_at, updated_at } = request.body
+  const { name, description, rank, created_at, updated_at } = request.body
 
   const createServiceType = new CreateServiceTypesService()
 
   const serviceType = await createServiceType.execute({
     name,
     description,
+    rank,
     created_at,
     updated_at,
   })
@@ -28,12 +29,13 @@ serviceTypesRouter.post('/', ensureAuthenticated, ensureAdmin, async (request, r
 
 serviceTypesRouter.put('/:id', ensureAuthenticated, ensureAdmin, async (request, response) => {
   const { id } = request.params
-  const { name, description } = request.body
+  const { name, description, rank } = request.body
 
   const updateServiceTypes = new UpdateServiceTypeService()
   const servicesTypes = await updateServiceTypes.execute({
     id,
     name,
+    rank,
     description,
   })
 

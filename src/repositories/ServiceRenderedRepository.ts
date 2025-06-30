@@ -1,8 +1,21 @@
+import { Between } from 'typeorm' // Importe o operador Between do TypeORM
 import { AppDataSource } from '../database'
 import ServiceRendered from '../entities/ServiceRendered'
 
 class ServiceRenderedRepository {
   private repository = AppDataSource.getRepository(ServiceRendered)
+
+  public async findByDateRange(startDate: string, endDate: string): Promise<ServiceRendered[]> {
+    return this.repository.find({
+      where: {
+        service_date: Between(new Date(startDate), new Date(endDate)),
+      },
+      relations: ['military', 'serviceType'],
+      order: {
+        service_date: 'ASC', // Ordenar por data para facilitar no frontend
+      },
+    })
+  }
 
   public async findAll(): Promise<ServiceRendered[]> {
     return this.repository.find({
@@ -27,13 +40,15 @@ class ServiceRenderedRepository {
   }
 
   public async save(serviceRendered: ServiceRendered): Promise<ServiceRendered> {
-    const servicesTypesRepository = AppDataSource.getRepository(ServiceRendered)
-    return await servicesTypesRepository.save(serviceRendered)
+    return await this.repository.save(serviceRendered)
   }
 
   public async update(id: string, data: Partial<ServiceRendered>): Promise<ServiceRendered | null> {
     await this.repository.update(id, data)
-    return this.repository.findOne({ where: { id } })
+    return this.repository.findOne({
+      where: { id },
+      relations: ['military', 'serviceType'],
+    })
   }
 }
 
