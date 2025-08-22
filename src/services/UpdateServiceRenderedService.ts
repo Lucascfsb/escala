@@ -8,8 +8,8 @@ import ServiceTypeRepository from '../repositories/ServiceTypeRepository'
 
 interface Request {
   id: string
-  military_id?: string
-  military?: string
+  military_id?: string | null
+  military?: string | null
   service_types_id?: string
   serviceTypes?: string
   service_date?: Date
@@ -34,24 +34,26 @@ class UpdateServiceRenderedService {
       throw new AppError('Service not found', 404)
     }
 
-    if (military || military_id) {
-      let militaryToUpdate: Military | undefined
+    if (military_id !== undefined || military !== undefined) {
+      if (military_id === null || military === null) {
+        serviceRenderedUpdate.military = null
+        serviceRenderedUpdate.military_id = null
+      } else {
+        let militaryToUpdate: Military | null = null
 
-      if (military_id) {
-        const foundMilitary = await militaryRepository.findById(military_id)
-        militaryToUpdate = foundMilitary === null ? undefined : foundMilitary
+        if (military_id) {
+          militaryToUpdate = await militaryRepository.findById(military_id)
+        } else if (military) {
+          const foundMilitaries = await militaryRepository.findManyByName(military)
+          if (foundMilitaries && foundMilitaries.length > 0) {
+            militaryToUpdate = foundMilitaries[0]
+          }
+        }
+
         if (!militaryToUpdate) {
-          throw new AppError('Military not found with provided ID', 404)
+          throw new AppError('Military not found with provided ID or name', 404)
         }
-      } else if (military) {
-        const foundMilitaries = await militaryRepository.findManyByName(military)
-        if (!foundMilitaries || foundMilitaries.length === 0) {
-          throw new AppError(`Military "${military}" not found`, 404)
-        }
-        militaryToUpdate = foundMilitaries[0]
-      }
 
-      if (militaryToUpdate) {
         serviceRenderedUpdate.military = militaryToUpdate
         serviceRenderedUpdate.military_id = militaryToUpdate.id
       }

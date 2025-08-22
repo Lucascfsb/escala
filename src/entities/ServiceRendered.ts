@@ -17,11 +17,11 @@ class ServiceRendered {
   id: string
 
   @Column({ type: 'uuid', nullable: true })
-  military_id: string
+  military_id: string | null
 
   @ManyToOne(() => Military)
   @JoinColumn({ name: 'military_id' })
-  military: Military
+  military: Military | null
 
   @Column({ type: 'uuid' })
   service_types_id: string

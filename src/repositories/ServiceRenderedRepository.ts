@@ -43,6 +43,10 @@ class ServiceRenderedRepository {
     return await this.repository.save(serviceRendered)
   }
 
+  public async delete(id: string): Promise<void> {
+    await this.repository.delete(id)
+  }
+
   public async update(id: string, data: Partial<ServiceRendered>): Promise<ServiceRendered | null> {
     await this.repository.update(id, data)
     return this.repository.findOne({

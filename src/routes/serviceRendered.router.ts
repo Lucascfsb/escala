@@ -1,6 +1,7 @@
 import { Router } from 'express'
 
 import type ServiceRendered from '../entities/ServiceRendered'
+import AppError from '../errors/AppError'
 import ensureAdmin from '../middlewares/ensureAdmin'
 import ensureAuthenticated from '../middlewares/ensureAuthenticated'
 import ServiceRenderedRepository from '../repositories/ServiceRenderedRepository'
@@ -70,6 +71,20 @@ serviceRenderedRouter.get('/:name', async (request, response) => {
     return response.json(military)
   }
   return response.status(404).json({ error: 'Militar não encontrado' })
+})
+
+serviceRenderedRouter.delete('/:id', ensureAdmin, async (request, response) => {
+  const { id } = request.params
+  const serviceRenderedRepository = new ServiceRenderedRepository()
+
+  const serviceRenderedToDelete = await serviceRenderedRepository.findById({ id })
+  if (!serviceRenderedToDelete) {
+    throw new AppError('Service not found', 404)
+  }
+
+  await serviceRenderedRepository.delete(id) // Adicione um método delete no seu repositório
+
+  return response.status(204).send() // Retorna 204 No Content para sucesso sem resposta
 })
 
 export default serviceRenderedRouter
