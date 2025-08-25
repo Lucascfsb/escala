@@ -1,15 +1,15 @@
-import type Military from '../entities/Military'
-import type { Qualification, Rank } from '../entities/Military'
-import MilitariesRepository from '../repositories/MilitariesRepository'
+import type { Military } from "../entities/Military";
+import type { Qualification, Rank } from "../entities/Military";
+import { MilitariesRepository } from "../repositories/MilitariesRepository";
 
-import AppError from '../errors/AppError'
+import { AppError } from "../errors/AppError";
 
 interface Request {
-  id: string
-  name?: string
-  rank?: Rank
-  qualification?: Qualification
-  date_of_entry?: Date
+  id: string;
+  name?: string;
+  rank?: Rank;
+  qualification?: Qualification;
+  date_of_entry?: Date;
 }
 
 class UpdateMilitaryInfoService {
@@ -20,33 +20,33 @@ class UpdateMilitaryInfoService {
     date_of_entry,
     rank,
   }: Request): Promise<Military> {
-    const militariesRepository = new MilitariesRepository()
+    const militariesRepository = new MilitariesRepository();
 
-    const militaryUpdate = await militariesRepository.findById(id)
+    const militaryUpdate = await militariesRepository.findById(id);
 
     if (!militaryUpdate) {
-      throw new AppError('Military not found', 404)
+      throw new AppError("Military not found", 404);
     }
 
     if (name) {
-      militaryUpdate.name = name
+      militaryUpdate.name = name;
     }
     if (rank) {
-      militaryUpdate.rank = rank
+      militaryUpdate.rank = rank;
     }
     if (qualification) {
-      militaryUpdate.qualification = qualification
+      militaryUpdate.qualification = qualification;
     }
     if (date_of_entry) {
-      militaryUpdate.date_of_entry = date_of_entry
+      militaryUpdate.date_of_entry = date_of_entry;
     }
 
-    militaryUpdate.updated_at = new Date()
+    militaryUpdate.updated_at = new Date();
 
-    await militariesRepository.save(militaryUpdate)
+    await militariesRepository.save(militaryUpdate);
 
-    return militaryUpdate
+    return militaryUpdate;
   }
 }
 
-export default UpdateMilitaryInfoService
+export { UpdateMilitaryInfoService };

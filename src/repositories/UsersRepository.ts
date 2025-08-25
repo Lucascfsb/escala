@@ -1,16 +1,16 @@
-import { AppDataSource } from '../config/data-source'
-import User from '../entities/User'
+import { AppDataSource } from "../config/data-source";
+import { User } from "../entities/User";
 
-class UsersRepository {
-  private repository = AppDataSource.getRepository(User)
+export class UsersRepository {
+  private repository = AppDataSource.getRepository(User);
 
   public async findAll(): Promise<User[]> {
-    return this.repository.find()
+    return this.repository.find();
   }
 
   public async save(user: User): Promise<User> {
-    const userRepository = AppDataSource.getRepository(User)
-    return await userRepository.save(user)
+    const userRepository = AppDataSource.getRepository(User);
+    return await userRepository.save(user);
   }
 
   public async findById({ id }: { id: string }): Promise<User | null> {
@@ -18,8 +18,8 @@ class UsersRepository {
       where: {
         id,
       },
-    })
-    return findUser || null
+    });
+    return findUser || null;
   }
 
   public async findByEmail(email: string): Promise<User | null> {
@@ -27,9 +27,7 @@ class UsersRepository {
       where: {
         email,
       },
-    })
-    return findEmail || null
+    });
+    return findEmail || null;
   }
 }
-
-export default UsersRepository

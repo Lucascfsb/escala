@@ -1,15 +1,15 @@
-import { AppDataSource } from '../database'
-import ServiceTypes from '../entities/ServiceType'
+import { AppDataSource } from "../database";
+import { ServiceType } from "../entities/ServiceType";
 
-import { QueryFailedError } from 'typeorm'
-import AppError from '../errors/AppError'
+import { QueryFailedError } from "typeorm";
+import { AppError } from "../errors/AppError";
 
 interface Request {
-  name: string
-  description: string
-  rank: string
-  created_at: Date
-  updated_at: Date
+  name: string;
+  description: string;
+  rank: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 class CreateServiceTypeService {
@@ -19,28 +19,35 @@ class CreateServiceTypeService {
     rank,
     created_at,
     updated_at,
-  }: Request): Promise<ServiceTypes> {
-    const serviceTypesRepository = AppDataSource.getRepository(ServiceTypes)
+  }: Request): Promise<ServiceType> {
+    const serviceTypesRepository = AppDataSource.getRepository(ServiceType);
 
-    if (!name || typeof name !== 'string' || name.trim() === '') {
-      throw new AppError('O nome do serviço é obrigatório e deve ser uma string não vazia.', 400)
-    }
-    if (!description || typeof description !== 'string' || description.trim() === '') {
+    if (!name || typeof name !== "string" || name.trim() === "") {
       throw new AppError(
-        'A descrição do serviço é obrigatória e deve ser uma string não vazia.',
+        "O nome do serviço é obrigatório e deve ser uma string não vazia.",
         400
-      )
+      );
+    }
+    if (
+      !description ||
+      typeof description !== "string" ||
+      description.trim() === ""
+    ) {
+      throw new AppError(
+        "A descrição do serviço é obrigatória e deve ser uma string não vazia.",
+        400
+      );
     }
 
-    const lowerCaseName = name.toLowerCase()
+    const lowerCaseName = name.toLowerCase();
 
     try {
       const checkserviceTypesExists = await serviceTypesRepository.findOne({
         where: { name: lowerCaseName },
-      })
+      });
 
       if (checkserviceTypesExists) {
-        throw new AppError('This name is already used.')
+        throw new AppError("This name is already used.");
       }
 
       const serviceType = serviceTypesRepository.create({
@@ -49,20 +56,20 @@ class CreateServiceTypeService {
         rank,
         created_at,
         updated_at,
-      })
+      });
 
-      await serviceTypesRepository.save(serviceType)
+      await serviceTypesRepository.save(serviceType);
 
-      return serviceType
+      return serviceType;
     } catch (error) {
       if (
         error instanceof QueryFailedError &&
-        error.message.includes('duplicate key value violates unique constraint')
+        error.message.includes("duplicate key value violates unique constraint")
       ) {
-        throw new AppError('This name is already used.')
+        throw new AppError("This name is already used.");
       }
-      throw error
+      throw error;
     }
   }
 }
-export default CreateServiceTypeService
+export { CreateServiceTypeService };

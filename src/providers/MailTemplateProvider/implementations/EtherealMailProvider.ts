@@ -1,18 +1,18 @@
 // src/providers/MailProvider/implementations/EtherealMailProvider.ts
-import nodemailer, { Transporter } from 'nodemailer';
-import mailConfig from '../../../config/mail';
-import IMailProvider from '../../MailProvider/models/IMailProvider';
-import ISendMailDTO from '../../MailProvider/dtos/ISendMailDTO';
-import HandlebarsMailTemplateProvider from '../../MailTemplateProvider/implementations/HandlebarsMailTemplateProvider';
+import nodemailer, { Transporter } from "nodemailer";
+import { mailConfig } from "../../../config/mail";
+import { IMailProvider } from "../../MailProvider/models/IMailProvider";
+import { ISendMailDTO } from "../../MailProvider/dtos/ISendMailDTO";
+import { HandlebarsMailTemplateProvider } from "../../MailTemplateProvider/implementations/HandlebarsMailTemplateProvider";
 
-class EtherealMailProvider implements IMailProvider {
+export class EtherealMailProvider implements IMailProvider {
   private client: Transporter;
   private mailTemplateProvider: HandlebarsMailTemplateProvider;
-  private initialized: Promise<void>; 
+  private initialized: Promise<void>;
 
   constructor() {
     this.mailTemplateProvider = new HandlebarsMailTemplateProvider();
-    this.initialized = this.initialize(); 
+    this.initialized = this.initialize();
   }
 
   private async initialize(): Promise<void> {
@@ -28,13 +28,18 @@ class EtherealMailProvider implements IMailProvider {
         },
       });
     } catch (err) {
-      console.error('Failed to create Ethereal test account:', err);
-      throw err; 
+      console.error("Failed to create Ethereal test account:", err);
+      throw err;
     }
   }
 
-  public async sendMail({ to, from, subject, templateData }: ISendMailDTO): Promise<void> {
-    await this.initialized; 
+  public async sendMail({
+    to,
+    from,
+    subject,
+    templateData,
+  }: ISendMailDTO): Promise<void> {
+    await this.initialized;
 
     const { email, name } = mailConfig.defaults.from;
 
@@ -51,9 +56,7 @@ class EtherealMailProvider implements IMailProvider {
       html: await this.mailTemplateProvider.parse(templateData),
     });
 
-    console.log('Message sent: %s', message.messageId);
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(message));
+    console.log("Message sent: %s", message.messageId);
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(message));
   }
 }
-
-export default EtherealMailProvider;

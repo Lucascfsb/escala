@@ -1,25 +1,24 @@
-import { Router } from 'express'
+import { Router } from "express";
 
-import { instanceToPlain } from 'class-transformer'
+import { instanceToPlain } from "class-transformer";
 
-import AuthenticateUserService from '../services/AuthenticateUserService'
+import { AuthenticateUserService } from "../services/AuthenticateUserService";
 
-const sessionsRouter = Router()
+const sessionsRouter = Router();
 
-sessionsRouter.post('/', async (request, response) => {
-  const { email, password, role } = request.body
+sessionsRouter.post("/", async (request, response) => {
+  const { email, password } = request.body;
 
-  const authenticateUser = new AuthenticateUserService()
+  const authenticateUser = new AuthenticateUserService();
 
   const { user, token } = await authenticateUser.execute({
     email,
     password,
-    role,
-  })
+  });
 
-  const userResponse = instanceToPlain(user)
+  const userResponse = instanceToPlain(user);
 
-  return response.json({ user: userResponse, token })
-})
+  return response.json({ user: userResponse, token });
+});
 
-export default sessionsRouter
+export { sessionsRouter };

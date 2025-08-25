@@ -5,35 +5,36 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm'
+} from "typeorm";
 
-import ServiceRendered from './ServiceRendered'
+import { ServiceRendered } from "./ServiceRendered";
 
-@Entity('service_types')
-class ServiceType {
-  @PrimaryGeneratedColumn('uuid')
-  id: string
-
-  @Column()
-  name: string
+@Entity("service_types")
+export class ServiceType {
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column()
-  description: string
+  name: string;
 
   @Column()
-  rank: string
+  description: string;
+
+  @Column()
+  rank: string;
 
   @OneToMany(
     () => ServiceRendered,
-    serviceRendered => serviceRendered.serviceType
+    (serviceRendered) => serviceRendered.serviceType
   )
-  servicesRendered: ServiceRendered[]
+  servicesRendered: ServiceRendered[];
 
   @CreateDateColumn()
-  created_at: Date
+  created_at: Date;
 
   @UpdateDateColumn()
-  updated_at: Date
-}
+  updated_at: Date;
 
-export default ServiceType
+  @Column()
+  isActive: boolean;
+}
